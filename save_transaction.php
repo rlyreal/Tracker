@@ -35,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
         // Insert transaction
         $stmt = $conn->prepare("INSERT INTO transactions (type, amount, category_id, transaction_date) 
-                               VALUES (:type, :amount, :category_id, CURRENT_DATE())");
+                               VALUES (:type, :amount, :category_id, NOW())");
         
         $success = $stmt->execute([
             'type' => $type,
