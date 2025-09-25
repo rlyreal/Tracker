@@ -17,14 +17,9 @@ try {
     $conditions = [];
 
     // Base query
-    $sql = "SELECT t.*, 
-            CASE 
-                WHEN t.type = 'income' THEN ic.name 
-                ELSE ec.name 
-            END as category_name 
+    $sql = "SELECT t.*, c.name as category_name 
             FROM transactions t 
-            LEFT JOIN income_categories ic ON t.category_id = ic.id AND t.type = 'income'
-            LEFT JOIN expense_categories ec ON t.category_id = ec.id AND t.type = 'expense'
+            LEFT JOIN categories c ON t.category_id = c.id
             WHERE 1=1";
 
     // Type filter

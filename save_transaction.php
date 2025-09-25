@@ -20,10 +20,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     
     try {
-        // Get category ID
-        $categoryTable = $type == 'income' ? 'income_categories' : 'expense_categories';
-        $stmt = $conn->prepare("SELECT id FROM {$categoryTable} WHERE name = :name");
-        $stmt->execute(['name' => $category]);
+        // Get category ID from unified categories table
+        $stmt = $conn->prepare("SELECT id FROM categories WHERE name = :name AND type = :type");
+        $stmt->execute([
+            'name' => $category,
+            'type' => $type
+        ]);
         $result = $stmt->fetch();
         
         if (!$result) {

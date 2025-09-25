@@ -20,20 +20,22 @@ require_once 'config/db.php';
                 extend: {
                     colors: {
                         dark: {
-                            DEFAULT: '#0f1123',
-                            card: '#171b35'
+                            DEFAULT: '#0A0C10',
+                            card: '#12151C'
                         },
-                        primary: '#7C3AED',
-                        accent: '#F471FF',
-                        success: '#00FF9D',
-                        warning: '#FFB800',
-                        danger: '#FF3D57',
-                        income: '#dcfce7',
-                        expense: '#fee2e2',
-                        neon: {
-                            blue: '#4DFFFF',
-                            purple: '#9D4EDD',
-                            pink: '#FF49DB'
+                        primary: '#4B88A2',
+                        accent: '#252B36',
+                        success: '#39FF14',
+                        warning: '#E2B007',
+                        danger: '#C41E3A',
+                        income: '#1C2833',
+                        expense: '#22303C',
+                        bat: {
+                            blue: '#4B88A2',
+                            steel: '#71777D',
+                            navy: '#1B2838',
+                            black: '#0A0C10',
+                            gold: '#B5A642'
                         }
                     }
                 }
@@ -42,13 +44,14 @@ require_once 'config/db.php';
     </script>
     <style>
         :root {
-            --primary: #7C3AED;
-            --accent: #F471FF;
+            --primary: #FFD700;
+            --accent: #4A4A4A;
         }
         
         /* Theme Colors */
         .btn-primary {
             background-color: var(--primary);
+            color: #1a1a1a;
         }
         .text-primary {
             color: var(--primary);
@@ -62,6 +65,15 @@ require_once 'config/db.php';
         .text-accent {
             color: var(--accent);
         }
+        
+        /* Batman Theme Styles */
+        .bat-shadow {
+            box-shadow: 0 4px 12px rgba(255, 215, 0, 0.15);
+        }
+        
+        .bat-border {
+            border: 1px solid rgba(255, 215, 0, 0.2);
+        }
 
         /* Animation Settings */
         body:not(.reduce-animations) .animate-fade {
@@ -72,6 +84,26 @@ require_once 'config/db.php';
         }
         body.reduce-animations * {
             transition: none !important;
+        }
+        
+        /* Batman Theme Animations */
+        .bat-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .bat-hover:hover {
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        .bat-glow {
+            animation: batGlow 2s infinite ease-in-out;
+        }
+        
+        @keyframes batGlow {
+            0% { box-shadow: 0 0 5px rgba(255, 215, 0, 0.2); }
+            50% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.4); }
+            100% { box-shadow: 0 0 5px rgba(255, 215, 0, 0.2); }
         }
 
         /* Compact View */
@@ -95,13 +127,14 @@ require_once 'config/db.php';
             height: 80px;
         }
         .pulse-wave {
-            stroke: #7C3AED;
+            stroke: #4B88A2;
             stroke-dasharray: 1000;
             stroke-dashoffset: 1000;
             animation: pulse-wave 15s linear infinite;
             stroke-linecap: round;
             stroke-linejoin: round;
-            filter: drop-shadow(0 0 2px #7C3AED);
+            filter: drop-shadow(0 0 2px #4B88A2);
+            opacity: 0.6;
         }
         @keyframes pulse-wave {
             to {
@@ -159,28 +192,52 @@ require_once 'config/db.php';
             stroke-dashoffset: 326.73;
             animation: electricLoad 2s ease-in-out forwards;
         }
-        @keyframes electricLoad {
-            from {
-                stroke-dashoffset: 326.73;
-            }
-            to {
-                stroke-dashoffset: 0;
-            }
-        }
-        @keyframes electricPulse {
+        @keyframes batSignalGlow {
             0% {
-                filter: drop-shadow(0 0 2px currentColor);
+                filter: drop-shadow(0 0 2px rgba(75, 136, 162, 0.3));
                 opacity: 0.6;
             }
             50% {
-                filter: drop-shadow(0 0 12px currentColor) drop-shadow(0 0 25px currentColor);
+                filter: drop-shadow(0 0 8px rgba(75, 136, 162, 0.6));
                 opacity: 1;
             }
             100% {
-                filter: drop-shadow(0 0 2px currentColor);
+                filter: drop-shadow(0 0 2px rgba(75, 136, 162, 0.3));
                 opacity: 0.6;
             }
         }
+
+        @keyframes spinProgress {
+            0% {
+                transform: rotate(-90deg);
+                stroke-dashoffset: 410;
+            }
+            50% {
+                stroke-dashoffset: 200;
+            }
+            100% {
+                transform: rotate(270deg);
+                stroke-dashoffset: 410;
+            }
+        }
+
+        .spin-progress {
+            transform-origin: center;
+            animation: spinProgress 6s ease-in-out infinite, batSignalGlow 3s ease-in-out infinite;
+            stroke: #4B88A2;
+            stroke-linecap: round;
+            filter: drop-shadow(0 0 4px rgba(75, 136, 162, 0.4));
+        }
+
+        .progress-ring circle {
+            transition: all 0.3s ease-in-out;
+        }
+
+        .progress-background {
+            opacity: 0.1;
+            stroke: #4B88A2;
+        }
+        
         .calc-btn {
             padding: 0.4rem;
             font-size: 0.875rem;
@@ -250,64 +307,87 @@ require_once 'config/db.php';
             opacity: 1;
         }
 
-        .cyber-button {
+        .bat-button {
             position: relative;
-            background: linear-gradient(135deg, #7C3AED 0%, #F471FF 100%);
+            background: linear-gradient(135deg, #4B88A2 0%, #1B2838 100%);
             transition: all 0.3s ease;
             border: none;
             overflow: hidden;
+            color: #fff;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: bold;
+            border-radius: 2px;
+            border: 1px solid rgba(75, 136, 162, 0.3);
         }
 
-        .cyber-button::before {
+        .bat-button::before {
             content: '';
             position: absolute;
-            top: 2px;
-            left: 2px;
-            right: 2px;
-            bottom: 2px;
-            background: #171b35;
-            border-radius: inherit;
+            top: 1px;
+            left: 1px;
+            right: 1px;
+            bottom: 1px;
+            background: #12151C;
+            border-radius: 1px;
             z-index: 1;
+            transition: all 0.3s ease;
         }
 
-        .cyber-button span {
+        .bat-button span {
             position: relative;
             z-index: 2;
-            background: linear-gradient(135deg, #7C3AED 0%, #F471FF 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            color: #4B88A2;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: bold;
+            transition: all 0.3s ease;
         }
 
-        .cyber-button:hover {
+        .bat-button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 0 15px rgba(124, 58, 237, 0.5);
+            box-shadow: 0 0 20px rgba(75, 136, 162, 0.2);
+            border-color: rgba(75, 136, 162, 0.5);
         }
 
-        .cyber-button:hover span {
-            background: linear-gradient(135deg, #F471FF 0%, #7C3AED 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        .bat-button:hover::before {
+            background: #1B2838;
         }
 
-        .neon-text {
-            color: #4DFFFF;
-            text-shadow: 0 0 5px rgba(77, 255, 255, 0.5);
+        .bat-button:hover span {
+            color: #fff;
         }
 
-        .neon-text-success {
-            color: #00FF9D;
-            text-shadow: 0 0 5px rgba(0, 255, 157, 0.5);
+        .bat-text {
+            color: #4B88A2;
+            text-shadow: 0 0 5px rgba(75, 136, 162, 0.3);
         }
 
-        .neon-text-danger {
-            color: #FF3D57;
-            text-shadow: 0 0 5px rgba(255, 61, 87, 0.5);
+        .bat-text-success {
+            color: #39FF14;
+            text-shadow: 0 0 5px rgba(57, 255, 20, 0.3);
+        }
+
+        .bat-text-danger {
+            color: #C41E3A;
+            text-shadow: 0 0 5px rgba(196, 30, 58, 0.3);
+        }
+        
+        .bat-text-title {
+            color: #4B88A2;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: bold;
+            text-shadow: 0 0 10px rgba(75, 136, 162, 0.3);
         }
 
         /* Animated Background Effect */
-        /* Smart Card Styles */
+        /* Batman Card Styles */
         .smart-card {
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: linear-gradient(135deg, #12151C 0%, #1B2838 100%);
+            border: 1px solid rgba(75, 136, 162, 0.1);
+            box-shadow: 0 4px 12px rgba(10, 12, 16, 0.5);
         }
 
         .smart-card.minimized {
@@ -327,10 +407,12 @@ require_once 'config/db.php';
         .smart-card .card-header {
             cursor: move;
             user-select: none;
+            border-bottom: 1px solid rgba(75, 136, 162, 0.1);
         }
 
         .smart-card .minimize-btn {
             transition: transform 0.3s ease;
+            color: #4B88A2;
         }
 
         .smart-card.minimized .minimize-btn {
@@ -340,8 +422,118 @@ require_once 'config/db.php';
         .smart-card.dragging {
             opacity: 0.9;
             transform: scale(1.02);
-            box-shadow: 0 20px 25px -5px rgba(124, 58, 237, 0.1),
-                       0 8px 10px -6px rgba(124, 58, 237, 0.1);
+            box-shadow: 0 20px 25px -5px rgba(75, 136, 162, 0.1),
+                       0 8px 10px -6px rgba(75, 136, 162, 0.1);
+        }
+
+        /* Flying Bats Animation */
+        .bat {
+            position: fixed;
+            pointer-events: none;
+            opacity: 0;
+            z-index: 9999;
+        }
+
+        .bat svg {
+            width: 50px;
+            height: 25px;
+            color: #1a1a1a;
+            filter: drop-shadow(0 0 2px rgba(0,0,0,0.3));
+        }
+
+        @keyframes flyTopLeft {
+            0% {
+                transform: translate(0, 0) rotate(0deg) scale(1);
+                opacity: 0.9;
+            }
+            50% {
+                transform: translate(-300px, -200px) rotate(-45deg) scale(1.2);
+                opacity: 0.7;
+            }
+            100% {
+                transform: translate(-600px, -400px) rotate(-90deg) scale(0.5);
+                opacity: 0;
+            }
+        }
+
+        @keyframes flyTopRight {
+            0% {
+                transform: translate(0, 0) rotate(0deg) scale(1);
+                opacity: 0.9;
+            }
+            50% {
+                transform: translate(300px, -200px) rotate(45deg) scale(1.2);
+                opacity: 0.7;
+            }
+            100% {
+                transform: translate(600px, -400px) rotate(90deg) scale(0.5);
+                opacity: 0;
+            }
+        }
+
+        @keyframes flyBottomLeft {
+            0% {
+                transform: translate(0, 0) rotate(0deg) scale(1);
+                opacity: 0.9;
+            }
+            50% {
+                transform: translate(-300px, 200px) rotate(-135deg) scale(1.2);
+                opacity: 0.7;
+            }
+            100% {
+                transform: translate(-600px, 400px) rotate(-180deg) scale(0.5);
+                opacity: 0;
+            }
+        }
+
+        @keyframes flyBottomRight {
+            0% {
+                transform: translate(0, 0) rotate(0deg) scale(1);
+                opacity: 0.9;
+            }
+            50% {
+                transform: translate(300px, 200px) rotate(135deg) scale(1.2);
+                opacity: 0.7;
+            }
+            100% {
+                transform: translate(600px, 400px) rotate(180deg) scale(0.5);
+                opacity: 0;
+            }
+        }
+
+        @keyframes flyCenterTop {
+            0% {
+                transform: translate(0, 0) rotate(0deg) scale(1);
+                opacity: 0.9;
+            }
+            50% {
+                transform: translate(0, -200px) rotate(0deg) scale(1.2);
+                opacity: 0.7;
+            }
+            100% {
+                transform: translate(0, -600px) rotate(0deg) scale(0.5);
+                opacity: 0;
+            }
+        }
+
+        @keyframes flyCenterBottom {
+            0% {
+                transform: translate(0, 0) rotate(0deg) scale(1);
+                opacity: 0.9;
+            }
+            50% {
+                transform: translate(0, 200px) rotate(180deg) scale(1.2);
+                opacity: 0.7;
+            }
+            100% {
+                transform: translate(0, 600px) rotate(360deg) scale(0.5);
+                opacity: 0;
+            }
+        }
+
+        .smart-card:hover {
+            border-color: rgba(75, 136, 162, 0.2);
+            box-shadow: 0 8px 16px rgba(10, 12, 16, 0.6);
         }
 
         .smart-card .drag-handle {
@@ -375,28 +567,41 @@ require_once 'config/db.php';
             animation: cardPulse 2s infinite;
         }
 
-        .cyber-grid {
-            position: absolute;
+        .bat-grid {
+            position: fixed;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            background-image: linear-gradient(transparent 1px, #0f1123 1px),
-                            linear-gradient(90deg, transparent 1px, #0f1123 1px);
-            background-size: 30px 30px;
-            background-position: center center;
-            animation: gridMove 20s linear infinite;
-            opacity: 0.1;
+            background: 
+                linear-gradient(to right, rgba(75, 136, 162, 0.03) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(75, 136, 162, 0.03) 1px, transparent 1px);
+            background-size: 20px 20px;
             pointer-events: none;
         }
 
-        @keyframes gridMove {
-            from {
-                transform: translate(0, 0);
-            }
-            to {
-                transform: translate(-30px, -30px);
-            }
+        .bat-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 20%, rgba(75, 136, 162, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(27, 40, 56, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .bat-card {
+            background: linear-gradient(135deg, #12151C 0%, #1B2838 100%);
+            border: 1px solid rgba(75, 136, 162, 0.1);
+            box-shadow: 0 4px 12px rgba(10, 12, 16, 0.5);
+            transition: all 0.3s ease;
+        }
+
+        .bat-card:hover {
+            border-color: rgba(75, 136, 162, 0.2);
+            box-shadow: 0 8px 16px rgba(10, 12, 16, 0.6);
         }
 
         /* Glowing Progress Bars */
@@ -421,20 +626,14 @@ require_once 'config/db.php';
             overflow: hidden;
             white-space: nowrap;
             margin: 0;
-            animation: typing 3s steps(30), cursor .4s step-end infinite alternate;
-            border-right: 3px solid #7C3AED;
+            animation: typing 3s steps(30);
+            border-right: none;
         }
-
+        
         @keyframes typing {
             from { width: 0 }
             to { width: 100% }
-        }
-
-        @keyframes cursor {
-            50% { border-color: transparent }
-        }
-
-        .welcome-text {
+        }        .welcome-text {
             background: linear-gradient(135deg, #7C3AED, #F471FF);
             -webkit-background-clip: text;
             background-clip: text;
@@ -462,7 +661,8 @@ require_once 'config/db.php';
     </style>
 </head>
 <body class="bg-dark text-white">
-    <div class="cyber-grid"></div>
+    <div class="bat-grid"></div>
+    <div class="bat-overlay"></div>
     <div class="container mx-auto px-2 py-2 max-w-7xl relative">
         <!-- Header -->
         <div class="flex justify-between items-center mb-4">
@@ -472,9 +672,13 @@ require_once 'config/db.php';
                         <div class="w-full h-full rounded-full overflow-hidden bg-dark flex items-center justify-center relative">
                             <?php
                             $avatarStyle = $_COOKIE['avatarStyle'] ?? 'avataaars';
-                            $avatarSeed = $_COOKIE['avatarSeed'] ?? 'Real';
-                            $avatarBg = $_COOKIE['avatarBg'] ?? '6953f7';
-                            $avatarUrl = "https://api.dicebear.com/7.x/{$avatarStyle}/svg?seed={$avatarSeed}&backgroundColor={$avatarBg}";
+                            if ($avatarStyle === 'batman') {
+                                $avatarUrl = "assets/bat.jpg";
+                            } else {
+                                $avatarSeed = $_COOKIE['avatarSeed'] ?? 'Real';
+                                $avatarBg = $_COOKIE['avatarBg'] ?? '6953f7';
+                                $avatarUrl = "https://api.dicebear.com/7.x/{$avatarStyle}/svg?seed={$avatarSeed}&backgroundColor={$avatarBg}";
+                            }
                             ?>
                             <img id="avatarImage" src="<?php echo htmlspecialchars($avatarUrl); ?>" alt="Profile" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110" />
                             <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
@@ -488,8 +692,8 @@ require_once 'config/db.php';
 
                 <!-- Avatar Edit Modal -->
                 <div id="avatarModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
-                    <div class="bg-dark-card rounded-xl p-6 w-full max-w-md">
-                        <h3 class="text-lg font-semibold mb-4">Edit Avatar</h3>
+                    <div class="bat-card rounded-xl p-6 w-full max-w-md">
+                        <h3 class="text-lg font-semibold mb-4 bat-text">Edit Avatar</h3>
                         <div class="space-y-4">
                             <div class="grid grid-cols-2 gap-4">
                                 <div>
@@ -503,6 +707,7 @@ require_once 'config/db.php';
                                         <option value="bottts">Robot</option>
                                         <option value="pixel-art">Pixel Art</option>
                                         <option value="initials">Initials</option>
+                                        <option value="batman">Batman</option>
                                     </select>
                                 </div>
                             </div>
@@ -519,7 +724,13 @@ require_once 'config/db.php';
                 </div>
                 <div>
                     <div class="typing-text">
-                        <h1 class="text-2xl font-bold welcome-text">Welcome back Real!</h1>
+                        <div class="flex items-center gap-3 mb-1">
+                            <h1 class="text-2xl font-bold bat-text-title">PALACIO FINANCES</h1>
+                            <div class="relative w-10 h-10 flex items-center justify-center">
+                                <img src="assets/batman.png" alt="Batman Logo" class="w-full h-full object-contain mix-blend-screen">
+                            </div>
+                        </div>
+                        <h2 class="text-xl bat-text">Welcome back Real!</h2>
                     </div>
                     <p class="text-gray-400 transform hover:-translate-y-0.5 transition-transform duration-200">Track your spending and savings</p>
                 </div>
@@ -545,7 +756,7 @@ require_once 'config/db.php';
                         <span id="notificationBadge" class="hidden absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full text-xs flex items-center justify-center text-white font-bold">0</span>
                     </button>
                     <!-- Notifications Panel -->
-                    <div id="notificationsPanel" class="hidden absolute top-12 right-0 bg-dark-card rounded-lg shadow-xl p-4 z-50 w-80 max-h-[400px] overflow-y-auto">
+                    <div id="notificationsPanel" class="hidden absolute top-12 right-0 bat-card rounded-lg p-4 z-50 w-80 max-h-[400px] overflow-y-auto">
                         <div class="flex justify-between items-center mb-3">
                             <h3 class="text-sm font-semibold">Notifications</h3>
                             <button id="clearNotifications" class="text-xs text-gray-400 hover:text-white transition">Clear all</button>
@@ -634,14 +845,14 @@ require_once 'config/db.php';
                         
                         <!-- Save Button -->
                         <div class="mt-4">
-                            <button onclick="saveSettings()" class="w-full cyber-button px-4 py-2 rounded-lg transition duration-300">
+                            <button onclick="saveSettings()" class="w-full bat-button px-4 py-2 rounded-lg transition duration-300">
                                 <span>Save Settings</span>
                             </button>
                         </div>
                     </div>
                 </div>
                 <!-- Calculator Overlay -->
-                <div id="calculatorOverlay" class="hidden absolute top-16 right-4 bg-dark-card rounded-lg shadow-xl p-3 z-50">
+                <div id="calculatorOverlay" class="hidden absolute top-16 right-4 bat-card rounded-lg p-3 z-50">
                     <input type="text" id="calcDisplay" class="w-full mb-2 px-3 py-1 text-right text-lg bg-dark border border-gray-600 rounded-lg" readonly>
                     <div class="grid grid-cols-4 gap-1">
                         <button onclick="calcClear()" class="calc-btn bg-red-500/20 text-red-500 hover:bg-red-500/30">C</button>
@@ -664,7 +875,7 @@ require_once 'config/db.php';
                 </div>
 
                 <!-- Debt Tracker Overlay -->
-                <div id="debtTrackerOverlay" class="hidden absolute top-16 right-4 bg-dark-card rounded-lg shadow-xl p-4 z-50 w-[500px] max-h-[600px] overflow-y-auto hover-card">
+                <div id="debtTrackerOverlay" class="hidden absolute top-16 right-4 bat-card rounded-lg p-2 z-50 w-[350px] max-h-[500px] overflow-y-auto">
                     <div class="flex justify-between items-center mb-4">
                         <div>
                             <h2 class="text-lg font-semibold">Debt Tracker</h2>
@@ -698,8 +909,8 @@ require_once 'config/db.php';
             // Get total income and expenses for current month
             $stmt = $conn->prepare("SELECT 
                 COALESCE(SUM(CASE WHEN type = 'income' THEN amount ELSE 0 END), 0) as total_income,
-                COALESCE(SUM(CASE WHEN type = 'expense' THEN amount ELSE 0 END), 0) as total_expenses
-                FROM transactions
+                COALESCE(SUM(CASE WHEN type = 'expense' OR category_id IN (18, 19) THEN amount ELSE 0 END), 0) as total_expenses
+                FROM transactions 
                 WHERE transaction_date BETWEEN :start AND :end");
             $stmt->execute(['start' => $monthStart, 'end' => $monthEnd]);
             $totals = $stmt->fetch();
@@ -708,7 +919,7 @@ require_once 'config/db.php';
             $totalExpenses = $totals['total_expenses'];
             ?>
             <!-- Spending Overview Card -->
-            <div class="smart-card bg-dark-card rounded-lg p-3 shadow-lg hover-card" data-card-id="monthly-overview">
+            <div class="smart-card bat-card rounded-lg p-3 cursor-pointer hover:transform hover:scale-[1.01] transition-all" data-card-id="monthly-overview" onclick="handleBatEffect(event)">
                 <div class="card-header flex justify-between items-start mb-2">
                     <div class="flex items-center gap-2">
                         <div class="drag-handle p-1 rounded hover:bg-gray-700">
@@ -734,26 +945,69 @@ require_once 'config/db.php';
                     <!-- Income Circle -->
                     <div class="text-center">
                         <div class="relative w-40 h-40 mx-auto mb-2">
-                            <svg class="progress-ring electric-loading" width="100%" height="100%" viewBox="0 0 160 160">
-                                <defs>
-                                    <filter id="income-glow">
-                                        <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
-                                        <feMerge>
-                                            <feMergeNode in="coloredBlur"/>
-                                            <feMergeNode in="SourceGraphic"/>
-                                        </feMerge>
-                                    </filter>
-                                </defs>
-                                <circle class="text-gray-700/20" stroke="currentColor" stroke-width="8" fill="transparent" r="65" cx="80" cy="80"/>
-                                <circle class="text-success electric-pulse electric-dash" stroke="currentColor" stroke-width="8" 
-                                    fill="transparent" r="65" cx="80" cy="80" filter="url(#income-glow)"/>
+                            <svg class="progress-ring" width="100%" height="100%" viewBox="0 0 160 160">
+                                <!-- Background pattern -->
+                                <pattern id="batTech" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
+                                    <path d="M0,10 L20,10 M10,0 L10,20" 
+                                          stroke="#4B88A2" 
+                                          stroke-width="0.5" 
+                                          stroke-opacity="0.1"/>
+                                </pattern>
+                                <circle cx="80" cy="80" r="75" fill="url(#batTech)"/>
+                                
+                                <!-- Main circles -->
+                                <circle class="progress-background" 
+                                        stroke-width="8" 
+                                        fill="transparent" 
+                                        r="65" 
+                                        cx="80" 
+                                        cy="80"/>
+                                        
+                                <circle class="spin-progress" 
+                                        stroke-width="8" 
+                                        fill="transparent" 
+                                        r="65" 
+                                        cx="80" 
+                                        cy="80" 
+                                        stroke-dasharray="408" 
+                                        stroke-dashoffset="102"/>
+
+                                <!-- Tech details -->
+                                <circle cx="80" cy="80" r="58" 
+                                        stroke="#4B88A2" 
+                                        stroke-width="0.5" 
+                                        stroke-opacity="0.2" 
+                                        fill="none"/>
+                                <circle cx="80" cy="80" r="72" 
+                                        stroke="#4B88A2" 
+                                        stroke-width="0.5" 
+                                        stroke-opacity="0.2" 
+                                        fill="none"/>
+
+                                <!-- Decorative marks -->
+                                <?php for($i = 0; $i < 12; $i++): 
+                                    $angle = $i * 30;
+                                    $x1 = 80 + cos(deg2rad($angle)) * 55;
+                                    $y1 = 80 + sin(deg2rad($angle)) * 55;
+                                    $x2 = 80 + cos(deg2rad($angle)) * 75;
+                                    $y2 = 80 + sin(deg2rad($angle)) * 75;
+                                ?>
+                                <line x1="<?php echo $x1; ?>" 
+                                      y1="<?php echo $y1; ?>" 
+                                      x2="<?php echo $x2; ?>" 
+                                      y2="<?php echo $y2; ?>" 
+                                      stroke="#4B88A2" 
+                                      stroke-width="0.5" 
+                                      stroke-opacity="0.3"/>
+                                <?php endfor; ?>
+
                                 <?php
                                     $prevMonthIncome = 0; // You would need to fetch this from your database
                                     $percentChange = $prevMonthIncome != 0 ? (($totalIncome - $prevMonthIncome) / $prevMonthIncome) * 100 : 0;
                                 ?>
                             </svg>
                             <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center w-full px-2">
-                                <span class="text-2xl font-bold text-success block">₱<?php echo number_format($totalIncome, 2); ?></span>
+                                <span id="monthlyIncome" class="text-lg font-bold bat-text-success block">₱<?php echo number_format($totalIncome, 2); ?></span>
                                 <p class="text-xs text-gray-400 mt-1">Total Income</p>
                                 <div class="flex items-center justify-center gap-1 mt-1">
                                     <?php
@@ -786,22 +1040,67 @@ require_once 'config/db.php';
                     <!-- Expense Circle -->
                     <div class="text-center">
                         <div class="relative w-40 h-40 mx-auto mb-2">
-                            <svg class="progress-ring electric-loading" width="100%" height="100%" viewBox="0 0 160 160">
-                                <defs>
-                                    <filter id="expense-glow">
-                                        <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
-                                        <feMerge>
-                                            <feMergeNode in="coloredBlur"/>
-                                            <feMergeNode in="SourceGraphic"/>
-                                        </feMerge>
-                                    </filter>
-                                </defs>
-                                <circle class="text-gray-700/20" stroke="currentColor" stroke-width="8" fill="transparent" r="65" cx="80" cy="80"/>
-                                <circle class="text-red-500 electric-pulse electric-dash" stroke="currentColor" stroke-width="8" 
-                                    fill="transparent" r="65" cx="80" cy="80" filter="url(#expense-glow)"/>
+                            <svg class="progress-ring" width="100%" height="100%" viewBox="0 0 160 160">
+                                <!-- Background pattern -->
+                                <pattern id="batTech2" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
+                                    <path d="M0,10 L20,10 M10,0 L10,20" 
+                                          stroke="#C41E3A" 
+                                          stroke-width="0.5" 
+                                          stroke-opacity="0.1"/>
+                                </pattern>
+                                <circle cx="80" cy="80" r="75" fill="url(#batTech2)"/>
+                                
+                                <!-- Main circles -->
+                                <circle class="progress-background" 
+                                        stroke-width="8" 
+                                        fill="transparent" 
+                                        r="65" 
+                                        cx="80" 
+                                        cy="80"
+                                        stroke="#C41E3A"
+                                        stroke-opacity="0.2"/>
+                                        
+                                <circle class="spin-progress" 
+                                        stroke-width="8" 
+                                        fill="transparent" 
+                                        r="65" 
+                                        cx="80" 
+                                        cy="80" 
+                                        stroke="#C41E3A"
+                                        stroke-dasharray="408" 
+                                        stroke-dashoffset="102"/>
+
+                                <!-- Tech details -->
+                                <circle cx="80" cy="80" r="58" 
+                                        stroke="#C41E3A" 
+                                        stroke-width="0.5" 
+                                        stroke-opacity="0.2" 
+                                        fill="none"/>
+                                <circle cx="80" cy="80" r="72" 
+                                        stroke="#C41E3A" 
+                                        stroke-width="0.5" 
+                                        stroke-opacity="0.2" 
+                                        fill="none"/>
+
+                                <!-- Decorative marks -->
+                                <?php for($i = 0; $i < 12; $i++): 
+                                    $angle = $i * 30;
+                                    $x1 = 80 + cos(deg2rad($angle)) * 55;
+                                    $y1 = 80 + sin(deg2rad($angle)) * 55;
+                                    $x2 = 80 + cos(deg2rad($angle)) * 75;
+                                    $y2 = 80 + sin(deg2rad($angle)) * 75;
+                                ?>
+                                <line x1="<?php echo $x1; ?>" 
+                                      y1="<?php echo $y1; ?>" 
+                                      x2="<?php echo $x2; ?>" 
+                                      y2="<?php echo $y2; ?>" 
+                                      stroke="#C41E3A" 
+                                      stroke-width="0.5" 
+                                      stroke-opacity="0.3"/>
+                                <?php endfor; ?>
                             </svg>
                             <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center w-full px-2">
-                                <span class="text-2xl font-bold text-red-500 block">₱<?php echo number_format($totalExpenses, 2); ?></span>
+                                <span id="monthlyExpense" class="text-lg font-bold text-red-500 block">₱<?php echo number_format($totalExpenses, 2); ?></span>
                                 <p class="text-xs text-gray-400 mt-1">Total Expenses</p>
                                 <div class="flex items-center justify-center gap-1 mt-1">
                                     <?php
@@ -1025,12 +1324,88 @@ require_once 'config/db.php';
                         });
                     </script>
                 </div>
+
+                <!-- Spending Insights -->
+                <div class="mt-2 bg-dark/50 rounded-lg p-2">
+                    <div class="flex justify-between items-center mb-2">
+                        <div class="flex items-center gap-1.5">
+                            <svg class="w-3 h-3 text-bat-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                            </svg>
+                            <h4 class="text-xs font-medium text-bat-blue">Spending Insights</h4>
+                        </div>
+                        <span class="text-[9px] text-bat-steel" id="insightsDate"></span>
+                    </div>
+                    <div class="grid grid-cols-2 gap-1.5">
+                        <div class="flex items-center gap-2 bg-dark/30 rounded p-1.5">
+                            <div class="p-1 bg-green-500/10 rounded">
+                                <svg class="w-3 h-3 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" />
+                                </svg>
+                            </div>
+                            <div>
+                                <p class="text-[9px] text-gray-400">Best Saving Day</p>
+                                <div class="flex items-baseline gap-1">
+                                    <span class="text-[11px] font-medium text-white" id="bestSavingDay">Mon</span>
+                                    <span class="text-[9px] text-green-400" id="bestSavingAmount">+₱2,500</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2 bg-dark/30 rounded p-1.5">
+                            <div class="p-1 bg-red-500/10 rounded">
+                                <svg class="w-3 h-3 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                                </svg>
+                            </div>
+                            <div>
+                                <p class="text-[9px] text-gray-400">Highest Spend</p>
+                                <div class="flex items-baseline gap-1">
+                                    <span class="text-[11px] font-medium text-white" id="highestSpendDay">Wed</span>
+                                    <span class="text-[9px] text-red-400" id="highestSpendAmount">-₱1,800</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2 bg-dark/30 rounded p-1.5">
+                            <div class="p-1 bg-bat-blue/10 rounded">
+                                <svg class="w-3 h-3 text-bat-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                                </svg>
+                            </div>
+                            <div>
+                                <p class="text-[9px] text-gray-400">Avg Daily Income</p>
+                                <div class="flex items-baseline gap-1">
+                                    <span class="text-[11px] font-medium text-white" id="avgDailyIncome">₱850</span>
+                                    <span class="text-[9px] text-bat-blue" id="avgIncomeChange">+12%</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2 bg-dark/30 rounded p-1.5">
+                            <div class="p-1 bg-yellow-500/10 rounded">
+                                <svg class="w-3 h-3 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                            </div>
+                            <div>
+                                <p class="text-[9px] text-gray-400">Daily Spending</p>
+                                <div class="flex items-baseline gap-1">
+                                    <span class="text-[11px] font-medium text-white" id="avgDailySpend">₱320</span>
+                                    <span class="text-[9px] text-yellow-400" id="avgSpendChange">-5%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- Cashflow Card -->
-            <div class="bg-dark-card rounded-xl p-3 shadow-lg hover-card">
+            <div class="bat-card rounded-xl p-3">
                 <div class="flex justify-between items-start mb-2">
-                    <h2 class="text-base font-semibold">My Cashflow</h2>
+                    <div class="flex items-center gap-2">
+                        <svg class="w-5 h-5 text-bat-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        <h2 class="text-base font-semibold bat-text">My Cashflow</h2>
+                    </div>
                     <div class="relative">
                         <button id="refreshCashflow" class="p-1.5 hover:bg-gray-700 rounded-lg transition">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1042,8 +1417,20 @@ require_once 'config/db.php';
                 <div class="mb-6">
                     <div class="flex justify-between items-center mb-4">
                         <div>
-                            <p class="text-xs text-gray-400" id="monthlyProgress">TOTAL BALANCE</p>
-                            <p class="text-2xl font-bold neon-text stat-value" id="netBalance">₱33,125.22</p>
+                            <div class="flex items-center gap-2">
+                                <p class="text-xs text-gray-400" id="monthlyProgress">TOTAL BALANCE</p>
+                                <button onclick="toggleBalanceVisibility()" id="toggleBalance" class="p-1 rounded-lg bg-bat-navy/40 hover:bg-bat-navy/60 transition-all">
+                                    <svg class="w-4 h-4 text-bat-blue toggle-show" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                    </svg>
+                                    <svg class="w-4 h-4 text-bat-blue toggle-hide hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
+                                    </svg>
+                                </button>
+                            </div>
+                            <p class="text-2xl font-bold bat-text stat-value" id="netBalance">₱33,125.22</p>
+                            <p class="text-2xl font-bold bat-text stat-value hidden" id="hiddenBalance">••••••••</p>
                         </div>
                     </div>
                     <div class="w-full bg-gray-700/30 rounded-lg h-8 relative overflow-hidden">
@@ -1120,83 +1507,151 @@ require_once 'config/db.php';
                 <div>
                     <h3 class="font-semibold mb-4">Today's Transactions</h3>
                     <div class="space-y-4">
-                        <div class="flex justify-between items-center bg-dark/50 p-3 rounded-lg">
-                            <div>
-                                <p class="font-medium text-success">Today's Income</p>
-                                <p class="text-xs text-gray-400" id="todayDate"></p>
+                        <div class="bg-bat-navy/40 p-2 rounded-lg border border-bat-blue/10 hover:border-bat-blue/20 transition-all duration-300">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <div class="flex items-center gap-2 mb-0.5">
+                                        <svg class="w-3.5 h-3.5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                        </svg>
+                                        <p class="text-xs font-medium text-green-400 uppercase tracking-wide">Today's Income</p>
+                                    </div>
+                                    <div class="flex items-center gap-1 mt-0.5">
+                                        <div class="h-1.5 w-full bg-dark/30 rounded-full overflow-hidden">
+                                            <div id="incomeProgress" class="h-full bg-green-400/50 transition-all duration-500" style="width: 0%"></div>
+                                        </div>
+                                        <span class="text-[10px] text-bat-steel whitespace-nowrap" id="todayDate"></span>
+                                    </div>
+                                    <div class="flex items-center gap-1 mt-1">
+                                        <span id="incomeStatus" class="text-[10px] text-green-400">Today's earnings</span>
+                                        <div id="incomeTrend" class="flex items-center gap-0.5 text-[10px] text-gray-400">
+                                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                                            </svg>
+                                            <span>0%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <span id="todayIncome" class="text-sm font-bold text-green-400 block">₱0.00</span>
+                                    <span class="text-[10px] text-gray-400">Today</span>
+                                </div>
                             </div>
-                            <span id="todayIncome" class="text-lg font-bold text-success">₱0.00</span>
                         </div>
-                        <div class="flex justify-between items-center bg-dark/50 p-3 rounded-lg">
-                            <div>
-                                <p class="text-sm font-medium text-red-500">Today's Expenses</p>
-                                <p class="text-xs text-gray-400" id="remainingBudget">Deducted from Balance</p>
-                                <p id="expenseStatus" class="text-xs mt-1"></p>
+                        <div class="bg-bat-navy/40 p-2 rounded-lg border border-bat-blue/10 hover:border-bat-blue/20 transition-all duration-300">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <div class="flex items-center gap-2 mb-0.5">
+                                        <svg class="w-3.5 h-3.5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4m8-8v16m4-8l4 4m0-8l-4 4m-8-4L4 8m0 8l4-4"></path>
+                                        </svg>
+                                        <p class="text-xs font-medium text-red-500 uppercase tracking-wide">Today's Expenses</p>
+                                    </div>
+                                    <div class="flex items-center gap-1 mt-0.5">
+                                        <div class="h-1.5 w-full bg-dark/30 rounded-full overflow-hidden">
+                                            <div id="expenseProgress" class="h-full bg-red-500/50 transition-all duration-500" style="width: 0%"></div>
+                                        </div>
+                                        <span class="text-[10px] text-bat-steel whitespace-nowrap" id="remainingBudget">₱0 / ₱200</span>
+                                    </div>
+                                    <div class="flex items-center gap-1 mt-1">
+                                        <span id="expenseStatus" class="text-[10px] text-green-400">Under budget</span>
+                                        <div id="expenseTrend" class="flex items-center gap-0.5 text-[10px] text-gray-400">
+                                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                                            </svg>
+                                            <span>0%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <span id="todayExpenses" class="text-sm font-bold text-red-500 block">₱0.00</span>
+                                    <span class="text-[10px] text-gray-400">Today</span>
+                                </div>
                             </div>
-                            <span id="todayExpenses" class="text-base font-bold text-red-500">₱0.00</span>
+                        </div>
+                        <!-- Borrowed Money Card -->
+                        <div class="bg-bat-navy/40 p-2 rounded-lg border border-bat-blue/10 hover:border-bat-blue/20 transition-all duration-300">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <div class="flex items-center gap-2 mb-0.5">
+                                        <svg class="w-3.5 h-3.5 text-bat-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2z"></path>
+                                        </svg>
+                                        <p class="text-xs font-medium text-bat-blue uppercase tracking-wide">Borrowed</p>
+                                    </div>
+                                    <p class="text-[10px] text-bat-steel">Debt</p>
+                                </div>
+                                <div class="text-right">
+                                    <span id="todayBorrowedLoad" class="text-sm font-bold text-bat-blue block">₱0.00</span>
+                                    <span class="text-[10px] text-gray-400">Current Total</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Weekly Meals Card -->
+                        <div class="bg-bat-navy/40 p-2 rounded-lg border border-bat-blue/10 hover:border-bat-blue/20 transition-all duration-300 mt-2">
+                            <!-- Header -->
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <div class="flex items-center gap-2 mb-0.5">
+                                        <svg class="w-3.5 h-3.5 text-bat-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 8v8m-4-5v5M8 8v8m-4-5v5m16-5v5M4 4h16l-4 4m-8 0L4 4"></path>
+                                        </svg>
+                                        <p class="text-xs font-medium text-bat-blue uppercase tracking-wide">Weekly</p>
+                                    </div>
+                                    <p class="text-[10px] text-bat-steel" id="weeklyDateRange"></p>
+                                </div>
+                                <div class="text-right">
+                                    <span id="weeklyMealsTotal" class="text-sm font-bold text-bat-blue block">₱0.00</span>
+                                    <span class="text-[10px] text-gray-400">Total</span>
+                                </div>
+                            </div>
+                            
+                            <!-- Expenses Grid -->
+                            <div class="grid grid-cols-3 gap-1 mt-2">
+                                <div class="bg-dark/30 rounded p-1 hover:bg-dark/40 transition-colors">
+                                    <p class="text-[9px] text-gray-400">Breakfast</p>
+                                    <p id="weeklyBreakfast" class="text-[11px] font-medium text-white">₱0.00</p>
+                                </div>
+                                <div class="bg-dark/30 rounded p-1 hover:bg-dark/40 transition-colors">
+                                    <p class="text-[9px] text-gray-400">Lunch</p>
+                                    <p id="weeklyLunch" class="text-[11px] font-medium text-white">₱0.00</p>
+                                </div>
+                                <div class="bg-dark/30 rounded p-1 hover:bg-dark/40 transition-colors">
+                                    <p class="text-[9px] text-gray-400">Dinner</p>
+                                    <p id="weeklyDinner" class="text-[11px] font-medium text-white">₱0.00</p>
+                                </div>
+                                <div class="bg-dark/30 rounded p-1 hover:bg-dark/40 transition-colors">
+                                    <p class="text-[9px] text-gray-400">Bank</p>
+                                    <p id="weeklyBankFee" class="text-[11px] font-medium text-white">₱0.00</p>
+                                </div>
+                                <div class="bg-dark/30 rounded p-1 hover:bg-dark/40 transition-colors">
+                                    <p class="text-[9px] text-gray-400">Move It</p>
+                                    <p id="weeklyMoveIt" class="text-[11px] font-medium text-white">₱0.00</p>
+                                </div>
+                                <div class="bg-dark/30 rounded p-1 hover:bg-dark/40 transition-colors">
+                                    <p class="text-[9px] text-gray-400">Data</p>
+                                    <p id="weeklyDataLoad" class="text-[11px] font-medium text-white">₱0.00</p>
+                                </div>
+                            </div>
+                            
+                            <!-- Progress Indicator -->
+                            <div class="mt-2 pt-2 border-t border-bat-blue/10">
+                                <div class="h-1 w-full bg-dark/30 rounded-full overflow-hidden">
+                                    <div id="weeklyProgress" class="h-full bg-bat-blue/50 rounded-full transition-all duration-500" style="width: 0%"></div>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Velocity Tracker -->
-                    <div class="mt-3 bg-dark/50 rounded-lg p-2">
-                        <div class="flex items-center gap-1">
-                            <h2 class="text-sm font-semibold">Spending Velocity</h2>
-                            <?php
-                            // Calculate spending velocity (last 3 days average)
-                            $stmt = $conn->prepare("SELECT 
-                                AVG(daily_total) as avg_spending
-                                FROM (
-                                    SELECT DATE(transaction_date) as date, 
-                                    SUM(CASE WHEN type = 'expense' THEN amount ELSE 0 END) as daily_total
-                                    FROM transactions 
-                                    WHERE DATE(transaction_date) >= DATE_SUB(CURRENT_DATE, INTERVAL 3 DAY)
-                                    GROUP BY DATE(transaction_date)
-                                ) as daily_totals");
-                            $stmt->execute();
-                            $result = $stmt->fetch();
-                            $avgSpending = $result['avg_spending'] ?? 0;
-                            
-                            // Get today's spending
-                            $stmt = $conn->prepare("SELECT 
-                                COALESCE(SUM(CASE WHEN type = 'expense' THEN amount ELSE 0 END), 0) as today_spending
-                                FROM transactions 
-                                WHERE DATE(transaction_date) = CURRENT_DATE");
-                            $stmt->execute();
-                            $result = $stmt->fetch();
-                            $todaySpending = $result['today_spending'];
-                            
-                            // Calculate percentage difference
-                            $percentDiff = $avgSpending != 0 ? (($todaySpending - $avgSpending) / $avgSpending) * 100 : 0;
-                            $trendClass = $percentDiff > 0 ? 'text-red-400' : 'text-success';
-                            $trendIcon = $percentDiff > 0 ? '↑' : '↓';
-                            
-                            // Calculate projected spending
-                            $daysLeft = date('t') - date('j');
-                            $projectedSpending = $avgSpending * $daysLeft;
-                            ?>
-                            <span class="text-xs font-bold <?php echo $trendClass; ?>">
-                                <?php echo $trendIcon . ' ' . abs(round($percentDiff)); ?>% vs 3-day avg
-                            </span>
-                        </div>
-                        <div class="flex items-center gap-2 mt-1">
-                            <div class="text-xs text-gray-400">
-                                3-day avg: <span class="text-white">₱<?php echo number_format($avgSpending, 2); ?>/day</span>
-                            </div>
-                            <div class="text-xs text-gray-400">
-                                Projected: 
-                                <span class="<?php echo $projectedSpending > 6000 ? 'text-red-400' : 'text-success'; ?>">
-                                    ₱<?php echo number_format($projectedSpending, 2); ?>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
+
                 </div>
             </div>
 
             <!-- Financial Goals Card -->
-            <div class="bg-dark-card rounded-xl p-3 shadow-lg hover-card">
+            <div class="bat-card rounded-xl p-3">
                 <div class="flex justify-between items-start mb-2">
-                    <h2 class="text-base font-semibold">Invest in My Future</h2>
+                    <h2 class="text-base font-semibold bat-text">Invest in My Future</h2>
                     <div class="flex gap-2">
                         <button onclick="showAddProfitModal()" class="p-1.5 hover:bg-gray-700 rounded-lg transition text-success">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1246,11 +1701,11 @@ require_once 'config/db.php';
             </div>
 
             <!-- Video Background Card -->
-            <div class="bg-dark-card rounded-xl overflow-hidden shadow-lg relative flex-1" style="min-height: 300px;">
+            <div class="bat-card rounded-xl overflow-hidden relative flex-1" style="min-height: 300px;">
                 <!-- Audio controls removed -->
                 <video 
                     id="backgroundVideo"
-                    class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 min-w-full min-h-full w-auto h-auto object-contain"
+                    class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full h-full object-cover scale-110"
                     autoplay
                     loop
                     muted
@@ -1265,9 +1720,9 @@ require_once 'config/db.php';
             <!-- Income & Expense Overview Cards -->
             <div class="col-span-2 grid grid-cols-2 gap-2">
                 <!-- Income Card -->
-                <div class="bg-dark-card rounded-lg p-2 shadow-lg hover-card">
+                <div class="bat-card rounded-lg p-2">
                     <div class="flex justify-between items-start mb-2">
-                        <h2 class="text-sm font-semibold">Income</h2>
+                        <h2 class="text-sm font-semibold bat-text">Income</h2>
                         <div class="relative">
                             <button onclick="switchView('income')" id="incomeToggle" 
                                     class="px-2 py-1 rounded text-xs font-medium transition-all duration-200 focus:outline-none hover:bg-gray-700">
@@ -1278,15 +1733,18 @@ require_once 'config/db.php';
                     <div id="incomeCard" class="bg-income rounded shadow-md p-2">
                         <div class="flex justify-between items-center">
                             <h5 class="text-gray-600 font-medium text-xs">Today:</h5>
-                            <h3 class="text-lg font-bold text-green-700" id="totalIncome">$0.00</h3>
+                            <h3 class="text-lg font-bold text-green-700" id="totalIncome">₱0.00</h3>
+                        </div>
+                        <div class="h-1 w-full bg-gray-200 rounded overflow-hidden mt-2">
+                            <div id="incomeProgress" class="h-full bg-green-500 transition-all duration-500" style="width: 0%"></div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Expense Card -->
-                <div class="bg-dark-card rounded-lg p-2 shadow-lg hover-card">
+                <div class="bat-card rounded-lg p-2">
                     <div class="flex justify-between items-start mb-2">
-                        <h2 class="text-sm font-semibold">Expenses</h2>
+                        <h2 class="text-sm font-semibold bat-text">Expenses</h2>
                         <div class="relative">
                             <button onclick="switchView('expense')" id="expenseToggle"
                                     class="px-2 py-1 rounded text-xs font-medium transition-all duration-200 focus:outline-none hover:bg-gray-700">
@@ -1297,16 +1755,19 @@ require_once 'config/db.php';
                     <div id="expenseCard" class="bg-expense rounded shadow-md p-2">
                         <div class="flex justify-between items-center">
                             <h5 class="text-gray-600 font-medium text-xs">Today:</h5>
-                            <h3 class="text-lg font-bold text-red-700" id="totalExpenses">$0.00</h3>
+                            <h3 class="text-lg font-bold text-red-700" id="totalExpenses">₱0.00</h3>
+                        </div>
+                        <div class="h-1 w-full bg-gray-200 rounded overflow-hidden mt-2">
+                            <div id="expenseProgress" class="h-full bg-red-500 transition-all duration-500" style="width: 0%"></div>
                         </div>
                     </div>
                 </div>
             </div>
 
             <!-- Switch View Card -->
-            <div class="col-span-2 bg-dark-card rounded-xl p-4 shadow-lg hover-card">
+            <div class="col-span-2 bat-card rounded-xl p-4">
                 <div class="flex justify-between items-start mb-3">
-                    <h2 class="text-lg font-semibold">Quick Switch</h2>
+                    <h2 class="text-lg font-semibold bat-text">Quick Switch</h2>
                 </div>
                 <div class="flex bg-dark rounded-lg p-1">
                     <button onclick="switchView('income')" 
@@ -1322,9 +1783,9 @@ require_once 'config/db.php';
         </div>
 
         <!-- Add Transaction Card -->
-        <div class="bg-dark-card rounded-xl shadow-lg p-4 mb-4 hover-card">
+        <div class="bat-card rounded-xl p-4 mb-4">
             <div class="flex justify-between items-start mb-3">
-                <h2 class="text-lg font-semibold">Add New Transaction</h2>
+                <h2 class="text-lg font-semibold bat-text">Add New Transaction</h2>
                 <div class="relative">
                     <button class="p-2 hover:bg-gray-700 rounded-lg transition">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1338,17 +1799,23 @@ require_once 'config/db.php';
                     <div class="md:col-span-1">
                         <select id="incomeSelect" class="w-full px-4 py-2 rounded-lg bg-dark text-white border border-gray-600 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none hidden">
                             <option value="">Select Income Source</option>
-                            <option value="Adopt Me">Adopt Me</option>
-                            <option value="Grow a Garden">Grow a Garden</option>
-                            <option value="Debt">Debt</option>
-                            <option value="MIDMAN fee">MIDMAN fee</option>
+                            <?php
+                            $stmt = $conn->prepare("SELECT name FROM categories WHERE type = 'income' ORDER BY name");
+                            $stmt->execute();
+                            while ($row = $stmt->fetch()) {
+                                echo '<option value="' . htmlspecialchars($row['name']) . '">' . htmlspecialchars($row['name']) . '</option>';
+                            }
+                            ?>
                         </select>
                         <select id="expenseSelect" class="w-full px-4 py-2 rounded-lg bg-dark text-white border border-gray-600 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none hidden">
                             <option value="">Select Expense Type</option>
-                            <option value="Breakfast">Breakfast</option>
-                            <option value="Lunch">Lunch</option>
-                            <option value="Dinner">Dinner</option>
-                            <option value="Wants/Needs/Fee">Wants/Needs/Fee</option>
+                            <?php
+                            $stmt = $conn->prepare("SELECT name FROM categories WHERE type = 'expense' ORDER BY name");
+                            $stmt->execute();
+                            while ($row = $stmt->fetch()) {
+                                echo '<option value="' . htmlspecialchars($row['name']) . '">' . htmlspecialchars($row['name']) . '</option>';
+                            }
+                            ?>
                         </select>
                     </div>
                     <input type="number" class="w-full px-4 py-2 rounded-lg bg-dark text-white border border-gray-600 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none" 
@@ -1356,7 +1823,7 @@ require_once 'config/db.php';
                     <div class="flex gap-2">
                         <input type="hidden" id="type" value="income">
                         <button type="submit" 
-                                class="w-full cyber-button px-6 py-2 rounded-lg transition duration-300">
+                                class="w-full bat-button px-6 py-2 rounded-lg transition duration-300">
                             <span>Add Transaction</span>
                         </button>
                     </div>
@@ -1365,9 +1832,9 @@ require_once 'config/db.php';
         </div>
 
         <!-- Recent Transactions Card -->
-        <div class="bg-dark-card rounded-xl shadow-lg p-4 mb-4 hover-card">
+        <div class="bat-card rounded-xl p-4 mb-4">
             <div class="flex justify-between items-start mb-3">
-                <h2 class="text-lg font-semibold">Transaction History</h2>
+                <h2 class="text-lg font-semibold bat-text">Transaction History</h2>
                 <div class="flex gap-2">
                     <button id="filterBtn" class="p-2 hover:bg-gray-700 rounded-lg transition flex items-center gap-1 text-sm">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1385,11 +1852,11 @@ require_once 'config/db.php';
             </div>
 
             <!-- Filters Panel -->
-            <div id="filtersPanel" class="hidden mb-4 p-4 bg-dark/50 rounded-lg">
+            <div id="filtersPanel" class="hidden mb-4 p-4 bg-bat-navy/40 rounded-lg border border-bat-blue/10">
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
                     <div>
-                        <label class="block text-sm font-medium text-gray-400 mb-1">Date Range</label>
-                        <select id="dateFilter" class="w-full px-3 py-2 rounded-lg bg-dark text-white border border-gray-600">
+                        <label class="block text-sm font-medium text-bat-blue uppercase tracking-wider mb-1">Date Range</label>
+                        <select id="dateFilter" class="w-full px-3 py-2 rounded-lg bg-bat-navy/60 text-white border border-bat-blue/20 focus:border-bat-blue/40 transition-colors duration-300">
                             <option value="all">All Time</option>
                             <option value="today">Today</option>
                             <option value="week">This Week</option>
@@ -1425,41 +1892,54 @@ require_once 'config/db.php';
                     </div>
                 </div>
                 <div class="flex justify-end mt-4 gap-2">
-                    <button onclick="clearFilters()" class="px-4 py-2 text-sm rounded-lg bg-gray-700 hover:bg-gray-600 transition">Clear Filters</button>
-                    <button onclick="applyFilters()" class="px-4 py-2 text-sm rounded-lg bg-primary hover:bg-primary/90 transition">Apply Filters</button>
+                    <button onclick="clearFilters()" class="px-4 py-2 text-xs uppercase tracking-wider font-medium rounded-lg bg-bat-navy/60 border border-bat-blue/10 text-bat-blue hover:bg-bat-navy/80 hover:border-bat-blue/30 transition-all duration-300">Clear Filters</button>
+                    <button onclick="applyFilters()" class="px-4 py-2 text-xs uppercase tracking-wider font-medium rounded-lg bg-bat-blue text-white hover:bg-bat-blue/90 transition-all duration-300">Apply Filters</button>
                 </div>
             </div>
 
             <div class="overflow-x-auto">
-                <table class="min-w-full divide-y divide-gray-700">
-                    <thead class="bg-dark-card">
+                <table class="min-w-full">
+                    <thead class="bg-bat-navy/60 border-b border-bat-blue/20">
                         <tr>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-bat-blue uppercase tracking-wider">
                                 Category
                             </th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-bat-blue uppercase tracking-wider">
                                 Amount
                             </th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-bat-blue uppercase tracking-wider">
                                 Date & Time
                             </th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-bat-blue uppercase tracking-wider">
                                 Actions
                             </th>
                         </tr>
                     </thead>
-                    <tbody id="transactionsList" class="bg-dark-card divide-y divide-gray-700">
+                    <tbody id="transactionsList" class="divide-y divide-bat-blue/10">
                         <!-- Transactions will be added here dynamically -->
                     </tbody>
                 </table>
                 <!-- Pagination -->
                 <div class="flex justify-between items-center mt-4">
-                    <div class="text-sm text-gray-400">
-                        Showing <span id="pageInfo">0-0 of 0</span> transactions
+                    <div class="text-sm text-bat-steel flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                        </svg>
+                        Showing <span id="pageInfo" class="text-bat-blue font-medium">0-0 of 0</span> transactions
                     </div>
                     <div class="flex gap-2">
-                        <button id="prevPage" class="px-3 py-1 rounded-lg bg-dark hover:bg-gray-700 transition disabled:opacity-50">Previous</button>
-                        <button id="nextPage" class="px-3 py-1 rounded-lg bg-dark hover:bg-gray-700 transition disabled:opacity-50">Next</button>
+                        <button id="prevPage" class="px-3 py-1.5 text-xs uppercase tracking-wider font-medium rounded bg-bat-navy/40 border border-bat-blue/10 text-bat-blue hover:bg-bat-navy/60 hover:border-bat-blue/30 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                            </svg>
+                            Previous
+                        </button>
+                        <button id="nextPage" class="px-3 py-1.5 text-xs uppercase tracking-wider font-medium rounded bg-bat-navy/40 border border-bat-blue/10 text-bat-blue hover:bg-bat-navy/60 hover:border-bat-blue/30 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1">
+                            Next
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                            </svg>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -1467,8 +1947,8 @@ require_once 'config/db.php';
 
         <!-- Add Debt Modal -->
         <div id="addDebtModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
-            <div class="bg-dark-card rounded-xl p-6 w-full max-w-md">
-                <h3 class="text-lg font-semibold mb-4">Add New Debt</h3>
+            <div class="bat-card rounded-xl p-6 w-full max-w-md">
+                <h3 class="text-lg font-semibold mb-4 bat-text">Add New Debt</h3>
                 <form id="addDebtForm" class="space-y-4">
                     <div>
                         <label class="block text-sm font-medium text-gray-400 mb-1">Debtor Name</label>
@@ -1496,6 +1976,236 @@ require_once 'config/db.php';
 
     </div>
     <script>
+        // Balance visibility toggle function
+        function toggleBalanceVisibility() {
+            const netBalance = document.getElementById('netBalance');
+            const hiddenBalance = document.getElementById('hiddenBalance');
+            const toggleBtn = document.getElementById('toggleBalance');
+            const showIcon = toggleBtn.querySelector('.toggle-show');
+            const hideIcon = toggleBtn.querySelector('.toggle-hide');
+
+            if (netBalance && hiddenBalance) {
+                // Toggle visibility with fade effect
+                if (netBalance.classList.contains('hidden')) {
+                    netBalance.classList.remove('hidden');
+                    hiddenBalance.classList.add('hidden');
+                    showIcon.classList.remove('hidden');
+                    hideIcon.classList.add('hidden');
+                } else {
+                    netBalance.classList.add('hidden');
+                    hiddenBalance.classList.remove('hidden');
+                    showIcon.classList.add('hidden');
+                    hideIcon.classList.remove('hidden');
+                }
+
+                // Save the state
+                localStorage.setItem('balanceHidden', netBalance.classList.contains('hidden'));
+            }
+        }
+
+        // Check saved balance visibility preference on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const balanceHidden = localStorage.getItem('balanceHidden') === 'true';
+            if (balanceHidden) {
+                toggleBalanceVisibility();
+            }
+        });
+
+        // Flying Bats Effect
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Adding bat effect listeners...');
+            
+            // Add click handlers to all cards
+            document.querySelectorAll('.bat-card, .smart-card').forEach(card => {
+                card.style.cursor = 'pointer';
+                card.addEventListener('click', handleBatEffect);
+                console.log('Added listener to:', card);
+            });
+        });
+
+        function handleBatEffect(event) {
+            console.log('Card clicked, releasing bats!');
+            releaseBats(event);
+        }
+
+        function createBat(x, y, delay = 0) {
+            console.log('Creating bat at:', x, y);
+            const bat = document.createElement('div');
+            bat.className = 'bat';
+            bat.style.left = x + 'px';
+            bat.style.top = y + 'px';
+            
+            // Create the bat SVG
+            bat.innerHTML = `
+                <svg viewBox="0 0 240 120" preserveAspectRatio="xMidYMid meet">
+                    <path d="M120,20 L160,20 L220,60 L200,80 L180,60 L160,80 L140,60 L120,80 L100,60 L80,80 L60,60 L40,80 L20,60 L80,20 L120,20 M120,30 L90,30 L40,65 L60,70 L80,65 L100,70 L120,65 L140,70 L160,65 L180,70 L200,65 L150,30 L120,30" 
+                          fill="#1a1a1a" />
+                </svg>
+            `;
+            
+            document.body.appendChild(bat);
+            
+            // All possible animations
+            const animations = [
+                'flyTopLeft', 'flyTopRight', 'flyBottomLeft', 'flyBottomRight',
+                'flyCenterTop', 'flyCenterBottom'
+            ];
+            const randomAnimation = animations[Math.floor(Math.random() * animations.length)];
+            
+            // Random size variation
+            const scale = 0.8 + Math.random() * 0.4; // 0.8 to 1.2
+            bat.style.transform = `scale(${scale})`;
+            
+            // Force a reflow before adding the animation
+            void bat.offsetWidth;
+            
+            bat.style.animation = `${randomAnimation} 2s ease-in-out forwards`;
+            
+            // Remove bat element after animation
+            setTimeout(() => bat.remove(), 2000);
+        }
+
+        function releaseBats(event) {
+            const rect = event.currentTarget.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+            
+            // Release more bats
+            const batCount = 12;
+            
+            for (let i = 0; i < batCount; i++) {
+                // Wider spread of initial positions
+                const offsetX = centerX + (Math.random() - 0.5) * 40;
+                const offsetY = centerY + (Math.random() - 0.5) * 40;
+                
+                // Longer delay between each bat
+                setTimeout(() => createBat(offsetX, offsetY), i * 80);
+            }
+            
+            // Add some random delayed bats for extra effect
+            for (let i = 0; i < 4; i++) {
+                setTimeout(() => {
+                    const randomX = Math.random() * window.innerWidth;
+                    const randomY = Math.random() * window.innerHeight;
+                    createBat(randomX, randomY);
+                }, 500 + Math.random() * 1000);
+            }
+        }
+
+        function releaseBats(event, count = 8) {
+            const rect = event.currentTarget.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+            
+            for (let i = 0; i < count; i++) {
+                // Add slight randomness to starting position
+                const offsetX = centerX + (Math.random() - 0.5) * 20;
+                const offsetY = centerY + (Math.random() - 0.5) * 20;
+                
+                // Delay each bat slightly
+                setTimeout(() => createBat(offsetX, offsetY), i * 50);
+            }
+        }
+
+        // Add click handlers to all cards
+        document.querySelectorAll('.bat-card, .smart-card').forEach(card => {
+            card.addEventListener('click', e => releaseBats(e));
+        });
+
+        // Initialize balance visibility toggle
+        function initializeBalanceToggle() {
+            const toggleBtn = document.getElementById('toggleBalance');
+            const netBalance = document.getElementById('netBalance');
+            const hiddenBalance = document.getElementById('hiddenBalance');
+            const showIcon = toggleBtn?.querySelector('.toggle-show');
+            const hideIcon = toggleBtn?.querySelector('.toggle-hide');
+
+            if (!toggleBtn || !netBalance || !hiddenBalance || !showIcon || !hideIcon) {
+                console.error('Missing required elements for balance toggle');
+                return;
+            }
+
+            function toggleBalance() {
+                netBalance.classList.toggle('hidden');
+                hiddenBalance.classList.toggle('hidden');
+                showIcon.classList.toggle('hidden');
+                hideIcon.classList.toggle('hidden');
+
+                // Save preference
+                localStorage.setItem('balanceHidden', netBalance.classList.contains('hidden'));
+
+                // Animation
+                const visibleElement = netBalance.classList.contains('hidden') ? hiddenBalance : netBalance;
+                visibleElement.style.animation = 'none';
+                visibleElement.offsetHeight; // Trigger reflow
+                visibleElement.style.animation = 'fadeIn 0.3s ease-in-out';
+            }
+
+            // Add click event
+            toggleBtn.addEventListener('click', toggleBalance);
+
+            // Check saved preference
+            const balanceHidden = localStorage.getItem('balanceHidden') === 'true';
+            if (balanceHidden && !netBalance.classList.contains('hidden')) {
+                toggleBalance();
+            }
+        }
+
+        // Call initialization when DOM is loaded
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initializeBalanceToggle);
+        } else {
+            initializeBalanceToggle();
+        }
+
+        // Balance visibility toggle
+        document.addEventListener('DOMContentLoaded', function() {
+            const toggleBtn = document.getElementById('toggleBalance');
+            if (toggleBtn) {
+                toggleBtn.addEventListener('click', function() {
+                    const netBalance = document.getElementById('netBalance');
+                    const hiddenBalance = document.getElementById('hiddenBalance');
+                    const showIcon = this.querySelector('.toggle-show');
+                    const hideIcon = this.querySelector('.toggle-hide');
+                    
+                    // Toggle visibility
+                    netBalance.classList.toggle('hidden');
+                    hiddenBalance.classList.toggle('hidden');
+                    showIcon.classList.toggle('hidden');
+                    hideIcon.classList.toggle('hidden');
+
+                    // Save preference to localStorage
+                    localStorage.setItem('balanceHidden', netBalance.classList.contains('hidden'));
+
+                    // Add a subtle animation
+                    if (!netBalance.classList.contains('hidden')) {
+                        netBalance.style.animation = 'fadeIn 0.3s ease-in-out';
+                    } else {
+                        hiddenBalance.style.animation = 'fadeIn 0.3s ease-in-out';
+                    }
+                });
+
+                // Check saved preference on page load
+                const balanceHidden = localStorage.getItem('balanceHidden') === 'true';
+                if (balanceHidden) {
+                    toggleBtn.click(); // Simulate click to hide balance
+                }
+            }
+        });
+
+        // Add fade in animation styles
+        if (!document.querySelector('#balanceAnimationStyle')) {
+            const style = document.createElement('style');
+            style.id = 'balanceAnimationStyle';
+            style.textContent = `
+                @keyframes fadeIn {
+                    from { opacity: 0; transform: translateY(-10px); }
+                    to { opacity: 1; transform: translateY(0); }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+
         // Initialize investment chart
         const ctx = document.getElementById('investmentChart').getContext('2d');
         const investmentChart = new Chart(ctx, {
@@ -1634,7 +2344,103 @@ require_once 'config/db.php';
             }
         });
 
+        function updateIncomeStatus(income, previousIncome = 0) {
+            const incomeProgress = document.getElementById('incomeProgress');
+            const incomeTrend = document.getElementById('incomeTrend');
+            const incomeStatus = document.getElementById('incomeStatus');
+            const dailyTarget = 500; // Daily income target
+
+            // Calculate percentage of target reached
+            const percentageReached = Math.min((income / dailyTarget) * 100, 100);
+            incomeProgress.style.width = `${percentageReached}%`;
+
+            // Update status text
+            if (income > dailyTarget) {
+                incomeStatus.textContent = 'Exceeded target';
+                incomeStatus.className = 'text-[10px] text-green-400 font-medium';
+                incomeProgress.classList.add('animate-pulse');
+            } else if (income > (dailyTarget * 0.5)) {
+                incomeStatus.textContent = 'Good progress';
+                incomeStatus.className = 'text-[10px] text-green-400';
+                incomeProgress.classList.remove('animate-pulse');
+            } else {
+                incomeStatus.textContent = "Today's earnings";
+                incomeStatus.className = 'text-[10px] text-gray-400';
+                incomeProgress.classList.remove('animate-pulse');
+            }
+
+            // Calculate and show trend
+            if (previousIncome > 0) {
+                const trendPercentage = ((income - previousIncome) / previousIncome) * 100;
+                const trendIcon = incomeTrend.querySelector('svg');
+                const trendText = incomeTrend.querySelector('span');
+                
+                if (trendPercentage > 0) {
+                    trendIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6"></path>';
+                    trendText.className = 'text-green-400';
+                } else if (trendPercentage < 0) {
+                    trendIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>';
+                    trendText.className = 'text-red-500';
+                }
+                trendText.textContent = `${Math.abs(trendPercentage).toFixed(1)}%`;
+            }
+        }
+
+        function updateExpenseStatus(expenses, previousExpenses = 0) {
+            const expenseStatus = document.getElementById('expenseStatus');
+            const expenseProgress = document.getElementById('expenseProgress');
+            const remainingBudget = document.getElementById('remainingBudget');
+            const expenseTrend = document.getElementById('expenseTrend');
+            const dailyBudget = 200;
+
+            // Calculate percentage of budget used
+            const percentageUsed = Math.min((expenses / dailyBudget) * 100, 100);
+            expenseProgress.style.width = `${percentageUsed}%`;
+
+            // Update remaining budget
+            remainingBudget.textContent = `₱${expenses.toFixed(0)} / ₱${dailyBudget}`;
+
+            // Update status text and colors
+            if (expenses > dailyBudget) {
+                expenseStatus.textContent = 'Over budget';
+                expenseStatus.className = 'text-[10px] text-red-500';
+                expenseProgress.classList.remove('bg-green-500/50', 'bg-yellow-500/50');
+                expenseProgress.classList.add('bg-red-500/50');
+            } else if (expenses > (dailyBudget * 0.75)) {
+                expenseStatus.textContent = 'Near limit';
+                expenseStatus.className = 'text-[10px] text-yellow-500';
+                expenseProgress.classList.remove('bg-green-500/50', 'bg-red-500/50');
+                expenseProgress.classList.add('bg-yellow-500/50');
+            } else {
+                expenseStatus.textContent = 'Under budget';
+                expenseStatus.className = 'text-[10px] text-green-400';
+                expenseProgress.classList.remove('bg-red-500/50', 'bg-yellow-500/50');
+                expenseProgress.classList.add('bg-green-500/50');
+            }
+
+            // Calculate and show trend
+            if (previousExpenses > 0) {
+                const trendPercentage = ((expenses - previousExpenses) / previousExpenses) * 100;
+                const trendIcon = expenseTrend.querySelector('svg');
+                const trendText = expenseTrend.querySelector('span');
+                
+                if (trendPercentage > 0) {
+                    trendIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>';
+                    trendText.className = 'text-red-500';
+                } else if (trendPercentage < 0) {
+                    trendIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6"></path>';
+                    trendText.className = 'text-green-400';
+                }
+                trendText.textContent = `${Math.abs(trendPercentage).toFixed(1)}%`;
+            }
+        }
+
         function animateValue(element, start, end, duration) {
+            if (typeof start !== 'number' || typeof end !== 'number') {
+                console.error('Invalid start or end value for animation');
+                return;
+            }
+            
             const startTime = performance.now();
             const formatter = new Intl.NumberFormat('en-PH', { 
                 minimumFractionDigits: 2, 
@@ -1650,12 +2456,27 @@ require_once 'config/db.php';
                 const easeOutQuart = 1 - Math.pow(1 - progress, 4);
                 const current = start + (end - start) * easeOutQuart;
                 
-                // Ensure we always show 2 decimal places
-                element.textContent = `₱${formatter.format(parseFloat(current.toFixed(2)))}`;
-                element.classList.add('animate-number');
+                // Ensure we always show 2 decimal places and add currency symbol
+                const formattedValue = formatter.format(parseFloat(current.toFixed(2)));
+                element.textContent = `₱${formattedValue}`;
+                
+                // Add visual feedback for changes
+                if (start !== end) {
+                    element.classList.add('animate-number');
+                    if (current > start) {
+                        element.classList.add('text-success');
+                    } else if (current < start) {
+                        element.classList.add('text-danger');
+                    }
+                }
                 
                 if (progress < 1) {
                     requestAnimationFrame(update);
+                } else {
+                    // Remove animation classes when done
+                    setTimeout(() => {
+                        element.classList.remove('text-success', 'text-danger');
+                    }, 1000);
                 }
             }
             
@@ -1668,16 +2489,56 @@ require_once 'config/db.php';
             .then(data => {
                 const income = parseFloat(data.income);
                 const expenses = parseFloat(data.expenses);
+                const borrowedLoad = parseFloat(data.borrowed_load);
+                
+                // Update income displays
+                const todayIncomeElement = document.getElementById('todayIncome');
                 const totalIncomeElement = document.getElementById('totalIncome');
+                const currentIncome = parseFloat(todayIncomeElement.textContent.replace(/[₱,]/g, '')) || 0;
+                animateValue(todayIncomeElement, currentIncome, income, 1000);
+                updateIncomeStatus(income, currentIncome);
+                if (totalIncomeElement) {
+                    animateValue(totalIncomeElement, currentIncome, income, 1000);
+                }
+                
+                // Update expense displays
+                const todayExpensesElement = document.getElementById('todayExpenses');
                 const totalExpensesElement = document.getElementById('totalExpenses');
+                const currentExpenses = parseFloat(todayExpensesElement.textContent.replace(/[₱,]/g, '')) || 0;
+                animateValue(todayExpensesElement, currentExpenses, expenses, 1000);
+                if (totalExpensesElement) {
+                    animateValue(totalExpensesElement, currentExpenses, expenses, 1000);
+                }
                 
-                // Get current values
-                const currentIncome = parseFloat(totalIncomeElement.textContent.replace(/[₱,]/g, '')) || 0;
-                const currentExpenses = parseFloat(totalExpensesElement.textContent.replace(/[₱,]/g, '')) || 0;
+                // Update borrowed money display
+                const todayBorrowedLoadElement = document.getElementById('todayBorrowedLoad');
+                const currentBorrowedLoad = parseFloat(todayBorrowedLoadElement.textContent.replace(/[₱,]/g, '')) || 0;
+                animateValue(todayBorrowedLoadElement, currentBorrowedLoad, borrowedLoad, 1000);
                 
-                // Animate the changes
-                animateValue(totalIncomeElement, currentIncome, income, 1000);
-                animateValue(totalExpensesElement, currentExpenses, expenses, 1000);
+                // Update expense status
+                updateExpenseStatus(expenses);
+                
+                // Update today's date
+                document.getElementById('todayDate').textContent = new Date().toLocaleDateString('en-PH', {
+                    month: 'short',
+                    day: 'numeric',
+                    year: 'numeric'
+                });
+
+                // Update progress bars
+                const dailyTarget = 1000; // Daily target in PHP
+                const incomeProgress = document.getElementById('incomeProgress');
+                const expenseProgress = document.getElementById('expenseProgress');
+                
+                if (incomeProgress) {
+                    const incomePercentage = Math.min((income / dailyTarget) * 100, 100);
+                    incomeProgress.style.width = `${incomePercentage}%`;
+                }
+                
+                if (expenseProgress) {
+                    const expensePercentage = Math.min((expenses / 200) * 100, 100);
+                    expenseProgress.style.width = `${expensePercentage}%`;
+                }
                 
                 // Update expense status
                 const expenseStatus = document.getElementById('expenseStatus');
@@ -1715,7 +2576,10 @@ require_once 'config/db.php';
             'Breakfast': '🍳',
             'Lunch': '🍱',
             'Dinner': '🍽️',
-            'Wants/Needs/Fee': '🛍️',
+            'Bank Fee': '🏦',
+            'Move it': '�',
+            'Data Load': '📱',
+            'Wants/Needs/Fee': '�️',
             // Add more categories and icons as needed
         };
 
@@ -1945,9 +2809,6 @@ require_once 'config/db.php';
             .then(data => {
                 if(data.success) {
                     // Update everything immediately
-                    updateBalance();
-                    updateCashflowCard();
-                    updateMonthlyOverview();
                     updateAllCards();
                     displayTransactions();
                     
@@ -1985,11 +2846,12 @@ require_once 'config/db.php';
                 if(data.success) {
                     this.reset();
                     // Update everything immediately
-                    updateBalance();
-                    updateCashflowCard();
-                    updateMonthlyOverview();
                     updateAllCards();
                     displayTransactions();
+                    // Explicitly update weekly meals totals
+                    updateWeeklyMealsTotals();
+                    // Dispatch event for any other listeners
+                    document.dispatchEvent(new CustomEvent('transactionAdded'));
                 } else {
                     alert('Error saving transaction: ' + data.message);
                 }
@@ -2080,10 +2942,27 @@ require_once 'config/db.php';
                     const todayExpenses = parseFloat(data.expenses) || 0;
                     const netBalance = parseFloat(totals.net_balance) || 0;
 
-                    // Update the display with both total and today's numbers
-                    document.getElementById('todayIncome').textContent = `₱${todayIncome.toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-                    document.getElementById('todayExpenses').textContent = `₱${todayExpenses.toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-                    document.getElementById('netBalance').textContent = `₱${netBalance.toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+                    // Get current values for animation
+                    const netBalanceElement = document.getElementById('netBalance');
+                    const todayIncomeElement = document.getElementById('todayIncome');
+                    const todayExpensesElement = document.getElementById('todayExpenses');
+                    
+                    const currentBalance = parseFloat(netBalanceElement.textContent.replace(/[₱,]/g, '')) || 0;
+                    const currentIncome = parseFloat(todayIncomeElement.textContent.replace(/[₱,]/g, '')) || 0;
+                    const currentExpenses = parseFloat(todayExpensesElement.textContent.replace(/[₱,]/g, '')) || 0;
+                    
+                    // Animate all values
+                    animateValue(todayIncomeElement, currentIncome, todayIncome, 1000);
+                    animateValue(todayExpensesElement, currentExpenses, todayExpenses, 1000);
+                    animateValue(netBalanceElement, currentBalance, netBalance, 2000);
+                    
+                    // Add pulse effect for running balance when it changes
+                    if (currentBalance !== netBalance) {
+                        netBalanceElement.classList.add('scale-110', 'transition-transform', 'duration-200');
+                        setTimeout(() => {
+                            netBalanceElement.classList.remove('scale-110');
+                        }, 200);
+                    }
                     
                     // Update progress information
                     document.getElementById('monthlyProgress').textContent = `Running Balance`;
@@ -2111,27 +2990,90 @@ require_once 'config/db.php';
                 const totalIncome = parseFloat(data.income) || 0;
                 const totalExpenses = parseFloat(data.expenses) || 0;
                 
-                // Update the monthly overview income number
-                const monthlyIncomeElement = document.querySelector('.text-success.text-2xl');
+                // Update the monthly overview income number with animation
+                const monthlyIncomeElement = document.getElementById('monthlyIncome');
                 if (monthlyIncomeElement) {
-                    animateValue(monthlyIncomeElement, parseFloat(monthlyIncomeElement.textContent.replace(/[₱,]/g, '')), totalIncome, 1000);
+                    const currentText = monthlyIncomeElement.textContent || '₱0.00';
+                    const currentIncome = parseFloat(currentText.replace(/[₱,]/g, '')) || 0;
+                    animateValue(monthlyIncomeElement, currentIncome, totalIncome, 1500);
                 }
                 
-                // Update the monthly overview expense number
-                const monthlyExpenseElement = document.querySelector('.text-red-500.text-2xl');
+                // Update the monthly overview expense number with animation
+                const monthlyExpenseElement = document.getElementById('monthlyExpense');
                 if (monthlyExpenseElement) {
-                    animateValue(monthlyExpenseElement, parseFloat(monthlyExpenseElement.textContent.replace(/[₱,]/g, '')), totalExpenses, 1000);
+                    const currentText = monthlyExpenseElement.textContent || '₱0.00';
+                    const currentExpenses = parseFloat(currentText.replace(/[₱,]/g, '')) || 0;
+                    animateValue(monthlyExpenseElement, currentExpenses, totalExpenses, 1500);
                 }
             } catch (error) {
                 console.error('Error updating monthly overview:', error);
             }
         }
 
-        // Function to update both cards
+        // Function to update spending insights
+        async function updateSpendingInsights() {
+            try {
+                const response = await fetch('get_monthly_totals.php?extended=true');
+                const data = await response.json();
+
+                // Update insights date
+                const currentDate = new Date();
+                document.getElementById('insightsDate').textContent = currentDate.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+
+                // Process data for insights
+                if (data.daily_stats && data.daily_stats.length > 0) {
+                    // Best saving day
+                    let bestDay = data.daily_stats.reduce((best, curr) => 
+                        (parseFloat(curr.net) > parseFloat(best.net)) ? curr : best
+                    );
+                    document.getElementById('bestSavingDay').textContent = new Date(bestDay.date).toLocaleDateString('en-US', { weekday: 'short' });
+                    document.getElementById('bestSavingAmount').textContent = `+₱${parseFloat(bestDay.net).toLocaleString()}`;
+
+                    // Highest spend day
+                    let worstDay = data.daily_stats.reduce((worst, curr) => 
+                        (parseFloat(curr.expenses) > parseFloat(worst.expenses)) ? curr : worst
+                    );
+                    document.getElementById('highestSpendDay').textContent = new Date(worstDay.date).toLocaleDateString('en-US', { weekday: 'short' });
+                    document.getElementById('highestSpendAmount').textContent = `-₱${parseFloat(worstDay.expenses).toLocaleString()}`;
+
+                    // Calculate averages
+                    const totalDays = data.daily_stats.length;
+                    const avgIncome = data.daily_stats.reduce((sum, day) => sum + parseFloat(day.income), 0) / totalDays;
+                    const avgSpend = data.daily_stats.reduce((sum, day) => sum + parseFloat(day.expenses), 0) / totalDays;
+                    
+                    // Income trend
+                    const prevAvgIncome = data.prev_daily_stats && data.prev_daily_stats.length > 0 ? 
+                        data.prev_daily_stats.reduce((sum, day) => sum + parseFloat(day.income), 0) / data.prev_daily_stats.length : 
+                        avgIncome;
+                    const incomeChange = ((avgIncome - prevAvgIncome) / prevAvgIncome) * 100;
+                    
+                    document.getElementById('avgDailyIncome').textContent = `₱${Math.round(avgIncome).toLocaleString()}`;
+                    document.getElementById('avgIncomeChange').textContent = `${incomeChange >= 0 ? '+' : ''}${Math.round(incomeChange)}%`;
+                    document.getElementById('avgIncomeChange').className = `text-[9px] ${incomeChange >= 0 ? 'text-bat-blue' : 'text-red-400'}`;
+
+                    // Spending trend
+                    const prevAvgSpend = data.prev_daily_stats && data.prev_daily_stats.length > 0 ?
+                        data.prev_daily_stats.reduce((sum, day) => sum + parseFloat(day.expenses), 0) / data.prev_daily_stats.length :
+                        avgSpend;
+                    const spendChange = ((avgSpend - prevAvgSpend) / prevAvgSpend) * 100;
+                    
+                    document.getElementById('avgDailySpend').textContent = `₱${Math.round(avgSpend).toLocaleString()}`;
+                    document.getElementById('avgSpendChange').textContent = `${spendChange >= 0 ? '+' : ''}${Math.round(spendChange)}%`;
+                    document.getElementById('avgSpendChange').className = `text-[9px] ${spendChange >= 0 ? 'text-yellow-400' : 'text-green-400'}`;
+                }
+            } catch (error) {
+                console.error('Error updating spending insights:', error);
+            }
+        }
+
+        // Function to update all cards
         async function updateAllCards() {
             await Promise.all([
                 updateCashflowCard(),
-                updateMonthlyOverview()
+                updateMonthlyOverview(),
+                updateBalance(),
+                updateWeeklyMealsTotals(),
+                updateSpendingInsights()
             ]);
         }
 
@@ -2359,16 +3301,24 @@ require_once 'config/db.php';
         }
 
         function updateAvatar() {
-            const seed = document.getElementById('avatarSeed').value || 'Real';
-            const backgroundColor = document.getElementById('backgroundColor').value.replace('#', '');
             const style = document.getElementById('avatarStyle').value;
-            const avatarUrl = `https://api.dicebear.com/7.x/${style}/svg?seed=${encodeURIComponent(seed)}&backgroundColor=${backgroundColor}`;
+            let avatarUrl;
+            
+            if (style === 'batman') {
+                avatarUrl = 'assets/bat.jpg';
+            } else {
+                const seed = document.getElementById('avatarSeed').value || 'Real';
+                const backgroundColor = document.getElementById('backgroundColor').value.replace('#', '');
+                avatarUrl = `https://api.dicebear.com/7.x/${style}/svg?seed=${encodeURIComponent(seed)}&backgroundColor=${backgroundColor}`;
+            }
             
             // Set cookies to persist avatar settings (valid for 1 year)
             const oneYear = 365 * 24 * 60 * 60;
             document.cookie = `avatarStyle=${style}; max-age=${oneYear}; path=/`;
-            document.cookie = `avatarSeed=${seed}; max-age=${oneYear}; path=/`;
-            document.cookie = `avatarBg=${backgroundColor}; max-age=${oneYear}; path=/`;
+            if (style !== 'batman') {
+                document.cookie = `avatarSeed=${seed}; max-age=${oneYear}; path=/`;
+                document.cookie = `avatarBg=${backgroundColor}; max-age=${oneYear}; path=/`;
+            }
             
             document.getElementById('avatarImage').src = avatarUrl;
             hideAvatarModal();
@@ -2884,5 +3834,103 @@ require_once 'config/db.php';
             </div>
         </div>
     </div>
+    <script>
+        // Function to fetch and update weekly meals totals
+        function updateWeeklyMealsTotals() {
+            // Show loading state
+            const totalElement = document.getElementById('weeklyMealsTotal');
+            const dateRangeElement = document.getElementById('weeklyDateRange');
+            totalElement.classList.add('animate-pulse');
+            
+            console.log('Fetching weekly meals totals...');
+            fetch('get_weekly_meal_totals.php')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok: ' + response.statusText);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Received data:', data);
+                    
+                    // If we get an error in the response
+                    if (data.error) {
+                        throw new Error(data.error);
+                    }
+                    
+                    // Update the date range
+                    const startDate = new Date(data.week_start);
+                    const endDate = new Date(data.week_end);
+                    const dateRange = `${startDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} - ${endDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`;
+                    dateRangeElement.textContent = dateRange;
+                    dateRangeElement.classList.remove('text-red-400');
+
+                    // Update individual category amounts
+                    ['Breakfast', 'Lunch', 'Dinner', 'BankFee', 'MoveIt', 'DataLoad'].forEach(category => {
+                        const element = document.getElementById('weekly' + category);
+                        if (element) {
+                            const amount = data[category.toLowerCase().replace('bankfee', 'bank_fee').replace('moveit', 'moveit') + '_total'];
+                            element.textContent = `₱${parseFloat(amount || 0).toFixed(2)}`;
+                            element.classList.remove('text-red-400');
+                        }
+                    });
+
+                    // Update total with animation
+                    const oldTotal = parseFloat(totalElement.textContent.replace('₱', '').replace(',', '')) || 0;
+                    animateValue(totalElement, oldTotal, data.total, 500, '₱');
+                    
+                    // Update progress bar (assuming weekly budget of ₱2000)
+                    const weeklyBudget = 2000;
+                    const progressPercentage = Math.min((data.total / weeklyBudget) * 100, 100);
+                    const progressBar = document.getElementById('weeklyProgress');
+                    progressBar.style.width = `${progressPercentage}%`;
+                    
+                    // Update progress bar color based on percentage
+                    if (progressPercentage >= 90) {
+                        progressBar.classList.remove('bg-bat-blue/50');
+                        progressBar.classList.add('bg-red-500/50');
+                    } else if (progressPercentage >= 75) {
+                        progressBar.classList.remove('bg-bat-blue/50');
+                        progressBar.classList.add('bg-yellow-500/50');
+                    } else {
+                        progressBar.classList.remove('bg-red-500/50', 'bg-yellow-500/50');
+                        progressBar.classList.add('bg-bat-blue/50');
+                    }
+                    
+                    // Remove loading state
+                    totalElement.classList.remove('animate-pulse');
+                    totalElement.classList.remove('text-red-400');
+                })
+                .catch(error => {
+                    console.error('Error fetching weekly meals totals:', error);
+                    
+                    // Show error state
+                    totalElement.textContent = '₱0.00';
+                    totalElement.classList.add('text-red-400');
+                    dateRangeElement.textContent = 'Error loading data';
+                    dateRangeElement.classList.add('text-red-400');
+                    
+                    // Show error state for individual categories
+                    ['Breakfast', 'Lunch', 'Dinner', 'BankFee', 'MoveIt', 'DataLoad'].forEach(category => {
+                        const element = document.getElementById('weekly' + category);
+                        if (element) {
+                            element.textContent = '₱0.00';
+                            element.classList.add('text-red-400');
+                        }
+                    });
+                })
+                .finally(() => {
+                    totalElement.classList.remove('animate-pulse');
+                });
+        }
+
+        // Update weekly meals totals when page loads and after new transactions
+        document.addEventListener('DOMContentLoaded', updateWeeklyMealsTotals);
+        document.addEventListener('transactionAdded', updateWeeklyMealsTotals);
+        document.addEventListener('transactionDeleted', updateWeeklyMealsTotals);
+
+        // Add periodic updates every 5 minutes
+        setInterval(updateWeeklyMealsTotals, 300000);
+    </script>
 </body>
 </html>
